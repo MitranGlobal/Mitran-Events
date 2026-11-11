@@ -20,7 +20,7 @@ export default function Why() {
         {/* Where the Positivity Hub video sat: a photo with the in-person promise on it. */}
         <Reveal className="mt-12">
           <div className="relative aspect-[16/10] overflow-hidden rounded-panel bg-stage shadow-lift sm:aspect-[16/8]">
-            <Image src={why.image} alt={why.imageAlt} fill sizes="(min-width: 1200px) 1136px, 100vw" className="object-cover object-[50%_60%]" />
+            <Image src={why.image} alt={why.imageAlt} fill sizes="(min-width: 1200px) 1136px, 100vw" className="object-cover object-[50%_22%]" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" aria-hidden="true" />
             <p className="absolute bottom-6 left-6 font-display text-[clamp(1.75rem,4.4vw,3.5rem)] leading-[1.08] text-ivory sm:bottom-10 sm:left-10">
               {why.imageLines.map((l, i) => (
