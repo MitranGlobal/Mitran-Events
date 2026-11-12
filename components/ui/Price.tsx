@@ -2,7 +2,6 @@ import { formatINR } from "@/lib/content";
 
 export default function Price({ price, was, note = "One-time payment", size = "lg", tone = "ink" }: { price: number; was?: number; note?: string; size?: "lg" | "xl"; tone?: "ink" | "light" }) {
   const save = was ? was - price : 0;
-  const pct = was ? Math.round((save / was) * 100) : 0;
   const main = tone === "light" ? "text-ivory" : "text-ink";
   const muted = tone === "light" ? "text-ivory/60" : "text-ink-soft";
   return (
@@ -19,7 +18,7 @@ export default function Price({ price, was, note = "One-time payment", size = "l
       <p className={`mt-2 text-sm ${muted}`}>{note}</p>
       {was && (
         <p className={`mt-3 inline-flex rounded-chip px-2.5 py-1 text-sm font-semibold bg-gold text-ink`}>
-          Save {formatINR(save)} ({pct}% off)
+          Save {formatINR(save)}
         </p>
       )}
     </div>
