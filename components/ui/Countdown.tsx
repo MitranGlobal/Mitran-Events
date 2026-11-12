@@ -2,15 +2,46 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
 
 /**
  * Countdown rebuilt from the Framer "Pro Countdown" component
- * (framer.com/m/Count-Down-yIqNhX.js): days · hours · minutes · seconds, each
- * digit sliding in from above with a short blur on a spring. Restyled in the
- * MiTran palette — gold digits, ivory labels — and set in Oswald to match the
- * hero lock-up tile.
+ * (framer.com/m/Count-Down-yIqNhX.js), with the same behaviour:
+ *
+ * 1. Independent digits — every number is split into single digits, each in its
+ *    own AnimatePresence slot, so 49 → 48 only moves the "9"; the "4" stays put.
+ * 2. Motion blur — digits enter from above and exit below through blur(6px).
+ * 3. Spring physics — stiffness 450, damping 35, mass 1: snaps in, no bounce.
+ * 4. Google Fonts — pass any of COUNTDOWN_FONTS as `font` and the font file is
+ *    loaded automatically (no CSS import needed).
+ *
+ * AnimatePresence uses mode="popLayout" so entering and exiting digits overlap
+ * without layout shift, and only transform / opacity / filter are animated.
+ * Like the original it always animates, even when the device asks for reduced
+ * motion — the movement is small and it is the point of the component.
  */
+
+export const COUNTDOWN_FONTS = [
+  "Inter", "Roboto", "Poppins", "DM Sans", "Oswald", "Montserrat", "Open Sans", "Lato",
+  "Playfair Display", "Nunito", "Raleway", "Bebas Neue", "Anton", "Fraunces", "Space Mono",
+] as const;
+export type CountdownFont = (typeof COUNTDOWN_FONTS)[number];
+
+// Narrow fonts get a narrower digit slot so the numbers don't look spaced out.
+const CONDENSED: CountdownFont[] = ["Oswald", "Bebas Neue", "Anton"];
+
+/** Same loader as the Framer component: injects the Google Fonts stylesheet once. */
+function useGoogleFont(font: string) {
+  useEffect(() => {
+    if (!font) return;
+    const id = `font-${font.replace(/\s+/g, "-")}`;
+    if (document.getElementById(id)) return;
+    const link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href = `https://fonts.googleapis.com/css?family=${font.replace(/\s+/g, "+")}:300,400,500,600,700,800,900&display=swap`;
+    document.head.appendChild(link);
+  }, [font]);
+}
 
 type Left = { days: number; hours: number; minutes: number; seconds: number };
 
@@ -25,17 +56,19 @@ function timeLeft(target: number): Left | null {
   };
 }
 
-function Digit({ value, reduced }: { value: string; reduced: boolean }) {
+const spring = { type: "spring", stiffness: 450, damping: 35, mass: 1 } as const;
+
+function Digit({ value, width }: { value: string; width: string }) {
   return (
-    <span className="relative flex h-[1.1em] w-[0.52em] justify-center overflow-hidden">
+    <span className="relative flex h-[1.1em] justify-center overflow-hidden" style={{ width }}>
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={value}
-          className="absolute leading-none"
-          initial={reduced ? false : { y: "-60%", opacity: 0, filter: "blur(6px)" }}
+          className="absolute leading-none will-change-[transform,opacity,filter]"
+          initial={{ y: "-60%", opacity: 0, filter: "blur(6px)" }}
           animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
-          exit={reduced ? { opacity: 0, transition: { duration: 0 } } : { y: "60%", opacity: 0, filter: "blur(6px)" }}
-          transition={{ type: "spring", stiffness: 450, damping: 35, mass: 1 }}
+          exit={{ y: "60%", opacity: 0, filter: "blur(6px)" }}
+          transition={spring}
         >
           {value}
         </motion.span>
@@ -44,32 +77,37 @@ function Digit({ value, reduced }: { value: string; reduced: boolean }) {
   );
 }
 
-function Group({ value, label, reduced }: { value: number | null; label: string; reduced: boolean }) {
+function Group({ value, label, width }: { value: number | null; label: string; width: string }) {
   const text = value === null ? "--" : String(value).padStart(2, "0");
   return (
     <div className="flex flex-col items-center">
-      <div className="flex font-lockup font-bold text-gold-bright">
+      <div className="flex text-gold-bright">
+        {/* One slot per digit position, so only the digit that changes animates */}
         {text.split("").map((d, i) => (
-          <Digit key={`${text.length}-${i}`} value={d} reduced={reduced} />
+          <Digit key={`${text.length}-${i}`} value={d} width={width} />
         ))}
       </div>
-      <span className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-ivory/60 sm:text-xs">{label}</span>
+      <span className="mt-2 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-ivory/60 sm:text-xs">{label}</span>
     </div>
   );
 }
 
-function Separator() {
-  return (
-    <span className="font-lockup font-bold leading-[1.05] text-gold/30" aria-hidden="true">
-      :
-    </span>
-  );
-}
-
-export default function Countdown({ target, onDone }: { target: string; onDone?: (done: boolean) => void }) {
-  const reduced = usePrefersReducedMotion();
+export default function Countdown({
+  target,
+  font = "Oswald",
+  weight = 700,
+  showSeparators = true,
+  onDone,
+}: {
+  target: string;
+  font?: CountdownFont;
+  weight?: 300 | 400 | 500 | 700 | 900;
+  showSeparators?: boolean;
+  onDone?: (done: boolean) => void;
+}) {
+  useGoogleFont(font);
   const end = new Date(target).getTime();
-  // Starts empty ("--") so the server HTML and first client render match; the clock fills in on mount.
+  // Starts as "--" so the server HTML and first client render match; the clock fills in on mount.
   const [left, setLeft] = useState<Left | null | undefined>(undefined);
 
   useEffect(() => {
@@ -83,8 +121,9 @@ export default function Countdown({ target, onDone }: { target: string; onDone?:
     if (left !== undefined) onDone?.(left === null);
   }, [left, onDone]);
 
-  const v = left ?? null;
   const pending = left === undefined;
+  const v = left ?? null;
+  const width = CONDENSED.includes(font) ? "0.52em" : "0.65em";
   const parts: [number | null, string][] = [
     [pending ? null : v?.days ?? 0, "Days"],
     [pending ? null : v?.hours ?? 0, "Hours"],
@@ -97,11 +136,16 @@ export default function Countdown({ target, onDone }: { target: string; onDone?:
       role="timer"
       aria-label={v ? `${v.days} days, ${v.hours} hours and ${v.minutes} minutes to go` : "Countdown to the masterclass"}
       className="flex items-start justify-center gap-2 text-[clamp(2.75rem,11vw,7.5rem)] sm:gap-5 md:gap-8"
+      style={{ fontFamily: `"${font}", sans-serif`, fontWeight: weight }}
     >
       {parts.map(([value, label], i) => (
         <div key={label} className="flex items-start gap-2 sm:gap-5 md:gap-8">
-          {i > 0 && <Separator />}
-          <Group value={value} label={label} reduced={reduced} />
+          {i > 0 && showSeparators && (
+            <span className="leading-[1.05] text-gold/30" aria-hidden="true">
+              :
+            </span>
+          )}
+          <Group value={value} label={label} width={width} />
         </div>
       ))}
     </div>

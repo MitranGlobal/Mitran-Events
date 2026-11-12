@@ -80,6 +80,9 @@ export const countdown = {
   eyebrow: "The room opens in",
   title: "The clock is ticking. The seats won’t wait.",
   lead: `Two days that can change how your home talks, and only so many chairs in the room. When this clock hits zero on Tuesday 29 December, the doors in ${event.city} close behind the families already inside.`,
+  /** Countdown font: any of Inter, Roboto, Poppins, DM Sans, Oswald, Montserrat, Open Sans, Lato,
+   *  Playfair Display, Nunito, Raleway, Bebas Neue, Anton, Fraunces, Space Mono — loaded automatically. */
+  font: "Oswald" as const,
   doneTitle: "The doors are open.",
   doneLead: `${event.name} is under way in ${event.city}.`,
 };

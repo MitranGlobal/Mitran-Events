@@ -28,7 +28,7 @@ export default function CountdownBand() {
           </Reveal>
 
           <div className="mt-10 md:mt-14">
-            <Countdown target={event.startsAt} onDone={setDone} />
+            <Countdown target={event.startsAt} font={countdown.font} onDone={setDone} />
           </div>
 
           <Reveal className="flex flex-col items-center">
