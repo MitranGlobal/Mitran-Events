@@ -2,7 +2,7 @@ import Price from "@/components/ui/Price";
 import BenefitList from "@/components/ui/BenefitList";
 import Reveal from "@/components/ui/Reveal";
 import RegisterButton from "@/components/ui/RegisterButton";
-import { event, isRegistrationOpen, pass, passGroups, pricing, registration } from "@/lib/content";
+import { event, pass, passGroups, pricing } from "@/lib/content";
 
 export default function Pricing() {
   return (
@@ -22,16 +22,12 @@ export default function Pricing() {
             </h3>
             <p className="mt-2 text-ink-soft">{pass.tagline}</p>
             <div className="mt-6">
-              <Price price={pass.price} note={pass.priceNote} tone="ink" />
+              <Price price={pass.price} was={pass.was} note={pass.priceNote} tone="ink" />
             </div>
             <div className="h-8" aria-hidden="true" />
             <BenefitList groups={passGroups} tone="ink" />
-            <RegisterButton variant="ink" surface="light" className="mt-10 w-full" />
-            {!isRegistrationOpen && (
-              <p className="mt-3 text-center text-sm text-ink-soft">
-                Registration opens {registration.opensOn}. {event.venueNote}
-              </p>
-            )}
+            <RegisterButton variant="ink" className="mt-10 w-full" />
+            <p className="mt-3 text-center text-sm text-ink-soft">{event.venueNote}</p>
           </article>
         </Reveal>
       </div>

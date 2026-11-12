@@ -55,7 +55,7 @@ export default function Agenda() {
             <div className="rounded-panel bg-mist p-7 text-ink shadow-lift sm:p-9">
               <p className="text-ink-soft">{pass.name}</p>
               <div className="mt-4">
-                <Price price={pass.price} note={pass.priceNote} tone="ink" />
+                <Price price={pass.price} was={pass.was} note={pass.priceNote} tone="ink" />
               </div>
               <ul className="mt-6 space-y-2 border-t border-mist-line pt-6 text-sm text-ink-soft">
                 <li className="flex items-center gap-2.5">
@@ -70,7 +70,7 @@ export default function Agenda() {
               <div className="mt-7">
                 <BenefitList groups={passGroups} tone="ink" compact />
               </div>
-              <RegisterButton variant="ink" surface="light" className="mt-8 w-full" />
+              <RegisterButton variant="ink" className="mt-8 w-full" />
             </div>
           </aside>
         </div>

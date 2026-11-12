@@ -2,27 +2,15 @@
  * ALL page copy, dates, prices and links live in this one file.
  *
  * Mitran Events is the page for MiTran Global's in-person events. To run the
- * next event, update the EVENT block (and REGISTRATION when sign-ups open);
+ * next event, update REGISTER_URL and the EVENT block;
  * the hero, top bar, agenda, price cards, FAQ and footer all read from here.
  */
 
 /* ═══════════════════════════════════════════════════════════════════════
- * REGISTRATION
- *
- * While `url` is empty, every register button on the page is replaced by a
- * "Registrations open 20 Nov" notice. On the day registrations open, paste
- * the checkout link into `url` and push: all of them become "Register now".
+ * REGISTRATION — every "Register now" button on the page goes here.
  * ═══════════════════════════════════════════════════════════════════════ */
-export const registration = {
-  url: "",
-  opensOn: "Friday 20 November 2026",
-  /** Short notice used on buttons while `url` is empty */
-  soon: "Registrations open 20 Nov",
-  /** Label once `url` is set */
-  open: "Register now",
-};
-
-export const isRegistrationOpen = registration.url.trim().length > 0;
+export const REGISTER_URL = "https://hub.mitranglobal.com/web/checkout/6ace0ed5f506917ea09e28b5";
+export const REGISTER_LABEL = "Register now";
 
 /* ═══════════════════════════════════════════════════════════════════════
  * EVENT
@@ -35,7 +23,11 @@ export const event = {
   venueNote: "Venue address and timings are shared with your registration confirmation.",
   datesShort: "29 & 30 Dec",
   datesLong: "Tuesday 29 & Wednesday 30 December 2026",
+  /** When the countdown reaches zero: Day 1 start, India time. Change the time here once it's fixed. */
+  startsAt: "2026-12-29T09:00:00+05:30",
   price: 4999,
+  /** Struck-out price shown beside the fee */
+  was: 38950,
   priceNote: "For the full two-day masterclass",
   audience: "For parents & teens (11–17)",
   facilitator: "Vidyashankar Guru",
@@ -47,7 +39,7 @@ export const site = {
   name: "Mitran Events",
   by: "MiTran Global",
   metaTitle: `${event.name} · In person in ${event.city}, 29–30 Dec 2026 | MiTran Global`,
-  metaDescription: `Your teenager says “fine.” What are they not telling you? Two days in one room with ${event.facilitator} for parents and teens. In person in ${event.city}, 29–30 December 2026. ${formatINR(event.price)}. Registrations open 20 November.`,
+  metaDescription: `Your teenager says “fine.” What are they not telling you? Two days in one room with ${event.facilitator} for parents and teens. In person in ${event.city}, 29–30 December 2026.`,
 };
 
 /* Thin gold strip above the menu */
@@ -74,13 +66,22 @@ export const hero = {
   meta: [
     { label: "Dates", value: event.datesShort },
     { label: "Place", value: event.city },
-    { label: "Fee", value: formatINR(event.price) },
+    { label: "Format", value: "In person" },
   ],
   tileBadge: `In person · ${event.city}`,
   tileLines: [
     { day: "Day 1 · Tue 29 Dec", title: "Beneath “Fine”" },
     { day: "Day 2 · Wed 30 Dec", title: "From managing to supporting" },
   ],
+};
+
+/* ───────────────────── Countdown to Day 1 (right after the hero) ───────────────────── */
+export const countdown = {
+  eyebrow: "The room opens in",
+  title: "The clock is ticking. The seats won’t wait.",
+  lead: `Two days that can change how your home talks, and only so many chairs in the room. When this clock hits zero on Tuesday 29 December, the doors in ${event.city} close behind the families already inside.`,
+  doneTitle: "The doors are open.",
+  doneLead: `${event.name} is under way in ${event.city}.`,
 };
 
 /* ───────────────────── "Sound familiar?" moving cards ───────────────────── */
@@ -212,12 +213,13 @@ export const pass = {
   name: `${event.name} · Two-day pass`,
   tagline: `In person in ${event.city} · ${event.datesLong}`,
   price: event.price,
+  was: event.was,
   priceNote: event.priceNote,
 };
 
 export const pricing = {
   title: "Save your seat in the room",
-  lead: `Registrations open on ${registration.opensOn}. Seats in the room are limited, so keep this page handy.`,
+  lead: `Seats in the room are limited. Register now to keep yours for ${event.datesLong} in ${event.city}.`,
 };
 
 /* ───────────────────── Testimonials (as published on mitranglobal.com) ───────────────────── */
@@ -277,12 +279,8 @@ export const faqs = [
     a: `In person only. There is no livestream, meeting link or recording. The whole masterclass happens in one room in ${event.city} on 29 and 30 December 2026.`,
   },
   {
-    q: "When can I register?",
-    a: `Registrations open on ${registration.opensOn}. The register buttons on this page switch on that day.`,
-  },
-  {
     q: "How much does it cost?",
-    a: `${formatINR(event.price)} for the full two-day masterclass.`,
+    a: `${formatINR(event.price)} for the full two-day masterclass (regular price ${formatINR(event.was)}).`,
   },
   {
     q: "Where exactly is the venue?",
@@ -294,7 +292,7 @@ export const faqs = [
   },
   {
     q: "Can my teen and spouse come?",
-    a: "Yes. The masterclass is built for parents and teens (11–17) together, and both parents are welcome. Seat details for families are shared when registrations open.",
+    a: "Yes. The masterclass is built for parents and teens (11–17) together, and both parents are welcome. Seat options are shown when you register.",
   },
   {
     q: "What should we bring?",

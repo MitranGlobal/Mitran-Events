@@ -93,20 +93,6 @@
     @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ivory px-8 py-4 text-base font-semibold text-ink
            transition-all duration-300 hover:-translate-y-[2px] hover:bg-white md:px-11 md:py-5 md:text-lg;
   }
-  /* "Registrations open 20 Nov" notice that stands in for register buttons.
-     Deliberately not a solid button, so nobody expects it to click through. */
-  .status-pill {
-    @apply inline-flex min-h-[48px] cursor-default select-none items-center justify-center gap-2.5 whitespace-nowrap rounded-full border px-6 text-[15px] font-semibold;
-  }
-  .status-pill-dark {
-    @apply status-pill border-gold/60 bg-gold/10 text-gold-bright;
-  }
-  .status-pill-light {
-    @apply status-pill border-ink/25 bg-ink/[0.04] text-ink;
-  }
-  .status-pill-lg {
-    @apply min-h-[56px] px-8 text-base md:min-h-[64px] md:px-10 md:text-lg;
-  }
   .beams {
     background: conic-gradient(from 200deg at 50% -10%, transparent 0deg, rgba(245, 209, 122, 0.1) 8deg, transparent 18deg,
         transparent 30deg, rgba(245, 209, 122, 0.07) 36deg, transparent 46deg,

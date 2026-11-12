@@ -1,6 +1,7 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Hero from "@/components/sections/Hero";
+import CountdownBand from "@/components/sections/CountdownBand";
 import Struggles from "@/components/sections/Struggles";
 import Why from "@/components/sections/Why";
 import Facilitator from "@/components/sections/Facilitator";
@@ -18,8 +19,9 @@ export default function Home() {
       <Nav />
       {/* Offset for the fixed gold strip + menu bar */}
       <main id="main" className="pt-[108px]">
-        {/* Hero (from Parent Live Sessions) → recognition → why in person → facilitator → proof → agenda → seat → FAQ */}
+        {/* Hero (from Parent Live Sessions) → countdown → recognition → why in person → facilitator → proof → agenda → seat → FAQ */}
         <Hero />
+        <CountdownBand />
         <Struggles />
         <Why />
         <Facilitator />

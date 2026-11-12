@@ -48,7 +48,7 @@ export default function Nav() {
           scrolled ? "bg-stage shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8)]" : "bg-stage"
         }`}
       >
-        {/* Gold strip (from the Parent Live Sessions page): where, when, and when registrations open */}
+        {/* Gold strip (from the Parent Live Sessions page): what, where and when */}
         <p className="announce flex h-9 items-center justify-center gap-2 truncate px-4 text-center text-[12px] font-semibold uppercase tracking-[0.04em] text-ink sm:text-[13px]">
           <span aria-hidden="true">✦</span>
           <span className="truncate sm:hidden">{announcement.short}</span>

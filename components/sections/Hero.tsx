@@ -15,7 +15,7 @@ const HERO_PHOTO = "";
 /**
  * The hero from the Parent Live Sessions page: a large rounded card inset from
  * the page edges, dot-eyebrow, huge headline, subhead, the registration pill
- * beside Dates / Place / Fee, and the black event lock-up tile bottom-right.
+ * beside Dates / Place / Format, and the black event lock-up tile bottom-right.
  */
 export default function Hero() {
   const reduce = useReducedMotion();
@@ -72,7 +72,7 @@ export default function Hero() {
             </motion.p>
 
             <motion.div {...up(0.4)} className="mt-9 flex flex-col gap-7 md:flex-row md:items-end md:gap-14">
-              <RegisterButton variant="hero" surface="dark" size="lg" className="self-start" />
+              <RegisterButton variant="hero" className="self-start" />
               <dl className="grid grid-cols-3 gap-x-6 gap-y-5 sm:flex sm:flex-wrap sm:gap-x-14">
                 {hero.meta.map((m) => (
                   <div key={m.label}>
